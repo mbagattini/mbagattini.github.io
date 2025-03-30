@@ -1,2 +1,2 @@
 > I'm Matteo Bagattini, a freelance software developer based in Milan, Italy. We can get in touch via my <a href='https://www.linkedin.com/in/matteobagattini/' target='_blank'>LinkedIn profile</a>.
-Run the 'vcard' command to get a qr-code with my contacts or the 'cv' command to access my resume
+Run the 'vcard' command to get a qr-code with my contacts or the 'cv' command to access my curriculum vitae.
