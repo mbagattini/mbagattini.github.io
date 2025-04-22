@@ -1,7 +1,6 @@
 > Here's a list of the available commands:
-
     contacts:   displays my contacts info. See also 'qrcode'.
-    cookies:    does not display a banner you have to accept to proceed            
+    cookies:    does not force you to accept to proceed            
     cv:         opens my curriculum vitae
     github:     opens my github repos
     help:       shows this help

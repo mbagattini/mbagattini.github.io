@@ -1,2 +1,2 @@
-> StaticVoid.it version 2025.0.330
+> StaticVoid.it version 2025.0.420
 Run the 'github' command for source code and licensing info.
