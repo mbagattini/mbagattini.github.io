@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     //returns "it" if the current browser is in Italian, "en" otherwise
     function getBrowserLanguage() {
-        return navigator.language.startsWith('en') ? 'it' : 'en';
+        return navigator.language.startsWith('it') ? 'it' : 'en';
     }
     
     //scrolls the terminal to the bottom
