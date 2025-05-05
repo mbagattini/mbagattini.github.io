@@ -1,0 +1,2 @@
+> Sono Matteo Bagattini, uno sviluppatore software freelance con base a Milano, Italia.
+Usa il comando 'qrcode' per scansionare la mia vcard, o 'linkedin' per trovarmi lì. Il mio curriculum può essere scaricato tramite il comando 'cv'.

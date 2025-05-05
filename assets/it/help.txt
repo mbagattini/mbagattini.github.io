@@ -1,0 +1,12 @@
+> Ecco un elenco dei comandi disponibili:
+    <i>contacts</i>:    mostra le mie informazioni di contatto. Vedi anche 'qrcode'
+    <i>cookies</i>      non ti obbliga ad accettare un banner per procedere
+    <i>cv</i>:          apre il mio Curriculum Vitae
+    <i>github</i>:      apre i miei repositories su github
+    <i>help</i>:        mostra questo aiuto
+    <i>lang</i>:        cambia la lingua di visualizzazione (usa 'lang en' per passare all'inglese, 'lang it' per l'italiano)
+    <i>linkedin</i>:    naviga verso il mio profilo LinkedIn
+    <i>privacy</i>:     mostra la brevissima privacy policy per questo sito
+    <i>qrcode</i>:      mostra un qr-code con il mio biglietto da visita elettronico (vcard)
+    <i>ver</i>:         mostra le informazioni sulla versione del sito
+    <i>who</i>:         visualizza una breve descrizione su chi sono

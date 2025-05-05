@@ -1,0 +1,2 @@
+> StaticVoid.it versione 2025.0.505
+Usa il comando 'github' per i sorgenti e le info di licenza.

@@ -1,0 +1,2 @@
+> Comando non trovato.
+Digita 'help' per una lista dei comandi disponibili.

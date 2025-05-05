@@ -1,0 +1,12 @@
+> Here's a list of the available commands:
+    <i>contacts</i>:    displays my contacts info. See also 'qrcode'.
+    <i>cookies</i>:     does not force you to accept to proceed            
+    <i>cv</i>:          opens my curriculum vitae
+    <i>github</i>:      opens my github repos
+    <i>help</i>:        shows this help
+    <i>lang</i>:        changes the language (use 'lang it' to switch to Italian, 'lang en' for English)
+    <i>linkedin</i>:    navigates to my linkedin profile
+    <i>privacy</i>:     privacy policy for the site
+    <i>qrcode</i>:      displays a qr-code with my vcard info
+    <i>ver</i>:         shows website version info
+    <i>who</i>:         shows a brief description of who I am

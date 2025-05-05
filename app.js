@@ -5,12 +5,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const commandLineElement = document.getElementById('prompt');
     const promptElement = document.getElementById('prompt-label');
     const bannerElement = document.getElementById('banner');
-    
-    //sets the current language according to the user's browser
-    //TODO: implement localization
+
+    //sets the default language according to the user's browser
     let currentLanguage = getBrowserLanguage();
     
-    //textual content of the prompt-label
+    //prompt text
     const promptText = "guest@staticvoid.it ~ #";
     
     //the welcome banner
@@ -22,21 +21,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         "███████║   ██║   ██║  ██║   ██║   ██║╚██████╗ ╚████╔╝ ╚██████╔╝██║██████╔╝██╗██║   ██║   \n" +
         "╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝  ╚═══╝   ╚═════╝ ╚═╝╚═════╝ ╚═╝╚═╝   ╚═╝     "  
     
-    const welcomeText = "Hello, guest! Your terminal is ready. Type 'help' for a list of supported commands.<br/>"
+    //localized welcome text
+    const welcomeText = {
+        en: "Hello, <i>guest</i>! Your terminal is ready. Type 'help' for a list of supported commands.<br/>",
+        it: "Ciao, <i>ospite</i>! Il tuo terminale è pronto. Digita 'help' per un elenco dei comandi supportati.<br/>"
+    };
     
     //keeps a history of the executed commands
     let historyIndex = -1;
     let history = [];
+
+    // display "loading..." while assets are being loaded
+    bannerElement.textContent = bannerText;
+    promptElement.textContent = "Loading assets...";
+
+    // preload assets
+    const assets = await preloadAssets();
     
-    //calls the UI initialization
-    initUI();
-    
-    //initialize the UI 
-    function initUI() {
-        bannerElement.textContent = bannerText;
-        promptElement.textContent = promptText;
-        outputElement.innerHTML = welcomeText + '<br/>';
-    }
+    //when ready, shows the prompt
+    promptElement.textContent = promptText;
+    outputElement.innerHTML = welcomeText[currentLanguage] + '<br/>';
     
     //listen for certain keypress to execute commands or scroll through history
     commandLineElement.addEventListener('keydown', async (event) => {
@@ -67,13 +71,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const args = userInput.split(' ').slice(1);
         const command = userInput.split(' ')[0].toLowerCase();
         
-        // if(isDebug) {
-        //     appendToOutput("<div class='response'>");
-        //     appendToOutput(`Command: ${command}<br>`);
-        //     appendToOutput(`Args: ${args}<br>`);
-        //     appendToOutput("</div>");
-        // }
-        
         switch (command) {
             case "clear":
                 executeClearCommand();
@@ -97,6 +94,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             case "github":
                 executeNavigateToCommand("https://github.com/mbagattini");
                 break;
+            case "lang":
+                executeLangCommand(args);
             case "":
                 //empty command
                 appendToOutput("");
@@ -104,6 +103,36 @@ document.addEventListener('DOMContentLoaded', async () => {
             default:
                 await executeHtmlOutputCommand("notfound");
         }
+    }
+
+    //preloads all the external text files
+    async function preloadAssets() {
+
+        const languages = ["en", "it"]; // Supported languages
+        const commands = ["help", "hello", "qrcode", "contacts", "cookies", "privacy", "ver", "who", "notfound"]; // List of commands
+        const assets = {};
+    
+        for (const lang of languages) {
+            assets[lang] = {}; // Initialize language object
+            for (const command of commands) {
+                const filePath = `assets/${lang}/${command}.txt`; // Assuming files are organized by language in subfolders
+                try {
+                    const response = await fetch(filePath);
+                    if (response.ok) {
+                        const text = await response.text();
+                        assets[lang][command] = text.replace(/\n/g, '<br>'); // Store preloaded content
+                    } else {
+                        console.warn(`Failed to load ${filePath}: ${response.statusText}`);
+                        assets[lang][command] = `Error: Could not load ${command} content.`;
+                    }
+                } catch (error) {
+                    console.error(`Error fetching ${filePath}:`, error);
+                    assets[lang][command] = `Error: Could not load ${command} content.`;
+                }
+            }
+        }
+    
+        return assets;
     }
     
     //queue a command to the commands history
@@ -115,32 +144,53 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     //appends new content to the terminal's buffer
-    function appendToOutput(html) {
-        outputElement.innerHTML += html;
+    function appendToOutput(...htmlParts) {
+        const htmlContent = htmlParts.join('');
+        outputElement.innerHTML += htmlContent;
     }
     
     //clears the output
     function executeClearCommand() {
-        initUI();
+        promptElement.textContent = promptText;
+        outputElement.innerHTML = welcomeText[currentLanguage] + '<br/>';
     }
     
     //change the UI language
-    // function executeLangCommand(args) {
-    //     //check if language is specified
-    //     if(args.length === 0) {
-    //         appendToOutput("<div class='response'>");
-    //         appendToOutput("> Invalid or missing argument: language_id<br/>");
-    //         appendToOutput("  Usage: lang --language_id><br/>");
-    //         appendToOutput("    --en: sets current language to English<br/>");
-    //         appendToOutput("    --it: sets current language to Italian");
-    //     }
-    // }
+    function executeLangCommand(args) {
+        //check if language is specified
+        if (args.length === 0 || (args[0] !== "en" && args[0] !== "it")) 
+        {
+            const errorMessage = {
+                en: "&gt; Invalid or missing argument: <i>language_id</i><br/>" +
+                    "   Usage: lang <i><language_id</i><br/>" +
+                    "       <i>en</i>: sets current language to English<br/>" +
+                    "       <i>it</i>: sets current language to Italian",
+                it: "&gt; Argomento non valido o mancante: <i>language_id</i><br/>" +
+                    "   Uso: lang <i>language_id</i><br/>" +
+                    "       <i>en</i>: imposta la lingua corrente su inglese<br/>" +
+                    "       <i>it</i>: imposta la lingua corrente su italiano"
+            }
+
+            appendToOutput(
+                "<div class='response'>",
+                errorMessage[currentLanguage],
+                "</div>"
+            );
+        }
+        else {
+            currentLanguage = args[0];
+            executeClearCommand();
+        }
+    }
     
-    //some commands simply display textual content upon invocation; the output for the command
-    //is stored in a text file having the command as file name
+    //some commands simply display textual content upon invocation; this method retrieves the content from the preloaded assets
     async function executeHtmlOutputCommand(command) {
-        const output = await fetchExternalTextContent(command);
-        appendToOutput("<div class='response'>" + output + "</div>");
+        const output = assets[currentLanguage][command];
+        appendToOutput(
+            "<div class='response'>",
+            output,
+            "</div>"
+        );
     }
     
     //runs a command that opens a new browser window heading to the specified url
@@ -148,24 +198,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         appendToOutput(`<div class='response'>> Navigating to ${url}...</div>`);
         window.open(url, "_blank");
     }
-    
-    //loads content from an external file
-    async function fetchExternalTextContent(command) {
-        const filePath = `assets/${command}.txt`;
-        console.log(filePath);
-        try {
-            const response = await fetch(filePath);
-            return (await response.text()).replace(/\n/g, '<br>');
-        } catch (error) {
-            return 'Error loading file: ' + error;
-        }
-    }
 
     //returns "it" if the current browser is in Italian, "en" otherwise
     function getBrowserLanguage() {
-        return navigator.language;
+        return navigator.language.startsWith('en') ? 'it' : 'en';
     }
     
+    //scrolls the terminal to the bottom
     function scrollToBottom() {
         commandLineElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
